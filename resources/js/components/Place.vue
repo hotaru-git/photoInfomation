@@ -115,7 +115,7 @@
 					>
 					<v-text-field
 					v-model="editedItem.other"
-					label="備考"
+					label="備考aaaaa"
 					></v-text-field>
 				</v-col>
 			</v-row>

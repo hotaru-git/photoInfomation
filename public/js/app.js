@@ -39503,7 +39503,7 @@ var render = function() {
                         { attrs: { cols: "12", sm: "6", md: "4" } },
                         [
                           _c("v-text-field", {
-                            attrs: { label: "備考" },
+                            attrs: { label: "備考aaaaa" },
                             model: {
                               value: _vm.editedItem.other,
                               callback: function($$v) {
