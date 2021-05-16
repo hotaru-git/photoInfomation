@@ -8,7 +8,7 @@ class PhotoInfo extends Model
 {
     
     // model名とテーブル名で紐付け
-    // model : PhotoInfo , tableName : photo_infos
+    // model : PhotoInfo , tableName : photoInfos
     protected $table = 'photoInfos';
 
     protected $fillable = [
@@ -20,9 +20,11 @@ class PhotoInfo extends Model
         'shutter_speed',
         'time_zone',
         'is_tripod',
-        'other'
+        'other',
+    
     ];
-    // Laravelでは「id」timestampsのカラム「create_at」「update_id」が標準で作成する仕組みがあるのでfalseにする
+
+    // ★Laravelでは「id」timestampsのカラム「create_at」「update_id」が標準で作成する仕組みがあるのでfalseにする
     public $timestamps = false;
     
 }

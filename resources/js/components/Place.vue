@@ -120,10 +120,10 @@
 						</v-col>
 					</v-row>
 				</v-container>
-				</v-card-text>
+			</v-card-text>
 
 		<!-- 入力情報を登録する -->
-				<v-card-actions>
+			<v-card-actions>
 				<v-spacer></v-spacer>
 				<v-btn
 				color="blue darken-1"
@@ -159,7 +159,7 @@ export default {
 					{ text: 'F値', align: 'center', value: 'f_value'},
 					{ text: 'シャッター速度', align: 'center', value: 'shutter_speed'},
 					{ text: '時間帯', align: 'center', value: 'time_zone'},
-					{ text: '三脚有無', align: 'center', value: 'tripod_flag'},
+					{ text: '三脚有無', align: 'center', value: 'is_tripod'},
 					{ text: '備考', align: 'center', value: 'other'},
 					// 削除行追加
 					{
@@ -172,6 +172,7 @@ export default {
 
 				editedIndex: -1,
 				editedItem: {
+					// default値を設定可能
 					photo_id: 0,
 					shooting_location: 0,
 				},
@@ -179,9 +180,6 @@ export default {
 					photo_id: 0,
 					shooting_location: 0,
 				},
-				// 追加しておくと項目がrequest payloadに追加される
-				// photo_id: 0,
-				// shooting_location: 0,
 			}
 		},
 		computed: {
@@ -189,7 +187,7 @@ export default {
 				return this.editedIndex === -1 ? 'New Item' : 'Edit Item'
 			},
 		},
-		mounted(){
+		created(){
 			/* 
 			  ①api/photoInfoでアクセスした際にjson形式でとれる
 			  ②responseされた情報をphotoInfoに積める
@@ -224,33 +222,30 @@ export default {
 		this is the method to register photo infamation when the infomation was input..
 		*/
 			save () {
-				// if (this.editedIndex > -1) {
-				// Object.assign(this.photoInfo[this.editedIndex], this.editedItem)
-				// } else {
+				if (this.editedIndex > -1) {
+				Object.assign(this.photoInfo[this.editedIndex], this.editedItem)
+				} else {
 				
-				// this.photoInfo.push(this.editedItem)
+				this.photoInfo.push(this.editedItem)
 				// 項目をDBに追加
 				var self = this;
 				axios.post('/api/photoInfo/',self.editedItem)
                 .then(response => {
-					self.photo_id = response.editedItem.photo_id;
-                    self.shooting_location = response.editedItem.shooting_location;
-					
-					console.log(response.editedItem.photo_id);
+					// do not describe
                 })
                 .catch(err => {
                     this.message = err;
                 });
 				}
-				// this.close()
+				this.close()
 			},
-			// close () {
-			// 	this.dialog = false
-			// 	this.$nextTick(() => {
-			// 	this.editedItem = Object.assign({}, this.defaultItem)
-			// 	this.editedIndex = -1
-			// 	})
-			// },
+			close () {
+				this.dialog = false
+				this.$nextTick(() => {
+				this.editedItem = Object.assign({}, this.defaultItem)
+				this.editedIndex = -1
+				})
+			},
 		}
-// }
+}
 </script>

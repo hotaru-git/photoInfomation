@@ -14,5 +14,18 @@
 Route::get('/', function () {
     return view('customer');
 });
+// 2021/05/16 リロード時、404エラー対応処理 start
+Route::get('/place', function () {
+    return view('customer');
+});
+
+Route::get('/admin', function () {
+    return view('customer');
+});
+
+Route::get('/photo-display', function () {
+    return view('customer');
+});
+// 2021/05/16 リロード時、404エラー対応処理 end
 
 Auth::routes();

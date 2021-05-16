@@ -13,14 +13,11 @@ use App\PhotoInfo;
 |
 */
 /*
---photo_infosの一覧表示
-return json形式のphoto_infosテーブルのデータ
+--photoInfosの一覧表示
 */
-
-
-
-// Route::apiResource('/store', 'PhotoInfoController');
-// Route::apiResource('/photoInfo/register', 'PhotoInfoController');
-// MEMO:完全な名前空間で指定しないとcontrollerないよーって怒られた
 Route::get('/photoInfo', [App\Http\Controllers\PhotoInfoController::class, 'index']);
+
+/*
+--photoInfosにデータ登録
+*/
 Route::post('/photoInfo', [App\Http\Controllers\PhotoInfoController::class, 'store']);
