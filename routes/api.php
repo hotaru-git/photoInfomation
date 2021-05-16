@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Http\Request;
-
+use App\PhotoInfo;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -12,17 +12,15 @@ use Illuminate\Http\Request;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+/*
+--photo_infosの一覧表示
+return json形式のphoto_infosテーブルのデータ
+*/
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
 
-Route::get('/photoInfo',function (Request $request) {
-	// SQL組み込み
-	$photoInfo = DB::select("select * from photo_infos");
-    
-	return response()->json(['photoInfo' => $photoInfo]);
 
-});
-
-Route::apiResource('/photoInfo/register', 'PhotoInfoController');
+// Route::apiResource('/store', 'PhotoInfoController');
+// Route::apiResource('/photoInfo/register', 'PhotoInfoController');
+// MEMO:完全な名前空間で指定しないとcontrollerないよーって怒られた
+Route::get('/photoInfo', [App\Http\Controllers\PhotoInfoController::class, 'index']);
+Route::post('/photoInfo', [App\Http\Controllers\PhotoInfoController::class, 'store']);

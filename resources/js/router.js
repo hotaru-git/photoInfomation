@@ -4,7 +4,7 @@ import Place from './components/Place.vue'
 import PhotoDisplay from './components/PhotoDisplay.vue'
 
 export default new Router({
-  //mode: 'history',
+  mode: 'history',
   
   routes: [
     {

@@ -13,10 +13,9 @@ class CreatePhotoInfosTable extends Migration
      */
     public function up()
     {
-        Schema::create('photo_infos', function (Blueprint $table) {
+        Schema::create('photoInfos', function (Blueprint $table) {
             $table->bigIncrements('photo_id');
             $table->string('shooting_location');
-            
         });
     }
 
@@ -27,6 +26,6 @@ class CreatePhotoInfosTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('photo_infos');
+        Schema::dropIfExists('photoInfos');
     }
 }

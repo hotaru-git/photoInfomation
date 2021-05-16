@@ -1,4 +1,5 @@
 <template slot="items" slot-scope="props">
+
 	<div id="app">
 		<v-data-table
          :headers="headers"
@@ -115,13 +116,14 @@
 					>
 					<v-text-field
 					v-model="editedItem.other"
-					label="備考aaaaa"
+					label="備考"
 					></v-text-field>
 				</v-col>
 			</v-row>
 		</v-container>
 		</v-card-text>
 
+<!-- 入力情報を登録する -->
 		<v-card-actions>
 		<v-spacer></v-spacer>
 		<v-btn
@@ -145,10 +147,11 @@
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
 		data(){
 			return{
-				photoInfo:[],
 				headers: [
 					{ text: '写真ID', align: 'center', value: 'photo_id' },
 					{ text: '撮影場所', align: 'center', value: 'shooting_location' },
@@ -166,6 +169,8 @@ export default {
 						sortable:false
 					}
       			],
+				photoInfo:[],
+
 				editedIndex: -1,
 				editedItem: {
 					photo_id: 0,
@@ -175,6 +180,9 @@ export default {
 					photo_id: 0,
 					shooting_location: 0,
 				},
+				// 追加しておくと項目がrequest payloadに追加される
+				// photo_id: 0,
+				// shooting_location: 0,
 			}
 		},
 		computed: {
@@ -182,15 +190,19 @@ export default {
 				return this.editedIndex === -1 ? 'New Item' : 'Edit Item'
 			},
 		},
-		created(){
+		mounted(){
 			/* 
 			  ①api/photoInfoでアクセスした際にjson形式でとれる
 			  ②responseされた情報をphotoInfoに積める
-			  ③
+			  ③api.phpでjsonデータを引っ張ってくる.
 			*/
-			axios.get('/api/photoInfo')
+			//axios.get('/api/photoInfo')
+			var self = this;
+			var url = '/api/photoInfo/';
+			axios.get(url)
 				.then(response => {
-					this.photoInfo = response.data.photoInfo;
+					self.photoInfo = response.data.photoInfo;
+					console.log(self.photoInfo);
 				})
 				.catch(error => {
 					console.log(error)
@@ -207,45 +219,40 @@ export default {
 				this.editedItem = Object.assign({}, item)
 				this.dialog = true
       		},
-		// 	getPhotoInfo() {
-        //     axios
-        //         .get('/api/photoInfo')
-		// 		.then(response => {
-		// 			this.photoInfo = response.data.photoInfo;
-		// 		})
-		// 		.catch(error => {
-		// 			console.log(error)
-		// 		});
-        // },
+			  
+
+		/*
+		this is the method to register photo infamation when the infomation was input..
+		*/
 			save () {
-				if (this.editedIndex > -1) {
-				Object.assign(this.photoInfo[this.editedIndex], this.editedItem)
-				} else {
-				// 
-				this.photoInfo.push(this.editedItem)
+				// if (this.editedIndex > -1) {
+				// Object.assign(this.photoInfo[this.editedIndex], this.editedItem)
+				// } else {
+				
+				// this.photoInfo.push(this.editedItem)
 				// 項目をDBに追加
-				axios.post("/api/photoInfo/register", {
+				axios.post('/api/photoInfo',this.defaultItem,{
                     photo_id: this.photo_id,
-                    shooting_location: this.shooting_location
-                })
+                    shooting_location: this.shooting_location,
+				})
                 .then(response => {
-                    //this.getPhotoInfo();
-                    this.photo_id = "";
-                    this.shooting_location = "";
+					// this.$router.push({photo_id: 'defaultItem.list'});
+					
+					console.log(response.photo_id);
                 })
                 .catch(err => {
                     this.message = err;
                 });
 				}
-				this.close()
+				// this.close()
 			},
-			close () {
-				this.dialog = false
-				this.$nextTick(() => {
-				this.editedItem = Object.assign({}, this.defaultItem)
-				this.editedIndex = -1
-				})
-			},
+			// close () {
+			// 	this.dialog = false
+			// 	this.$nextTick(() => {
+			// 	this.editedItem = Object.assign({}, this.defaultItem)
+			// 	this.editedIndex = -1
+			// 	})
+			// },
 		}
-}
+// }
 </script>

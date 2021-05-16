@@ -12,9 +12,18 @@ class PhotoInfoController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+    /*
+    --photoInfosの一覧表示
+    return json形式のphotoInfosテーブルのデータ
+
+    この変数$photoInfosをview側でjson形式でresponseする
+    */
     public function index()
     {
-        return PhotoInfo::all();
+        $photoInfo = PhotoInfo::all();
+
+        return response()->json(['photoInfo' => $photoInfo]);
     }
 
     /**
@@ -34,8 +43,20 @@ class PhotoInfoController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
+    // 登録メソッド
     {
-        //
+        $photoInfo = new PhotoInfo();
+        $photoInfo->fill($request->all())->save();
+
+        /*
+        PHPでの標準的は登録処理はこのようにフォームの値をrequestから各項目から1つずつデータを受け取って処理
+        $photoInfo->photo_id = $request->input('photo_id');
+        $photoInfo->shooting_location = $request->input('shooting_location');
+
+        $photoInfo->save();
+        */
+
+        return redirect()->route('photoInfo.show');
     }
 
     /**
