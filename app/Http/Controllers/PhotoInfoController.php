@@ -31,10 +31,10 @@ class PhotoInfoController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create($request)
-    {
-        PhotoInfo::create($request->all());
-    }
+    // public function create($request)
+    // {
+    //     PhotoInfo::create($request->all());
+    // }
 
     /**
      * Store a newly created resource in storage.
@@ -46,17 +46,28 @@ class PhotoInfoController extends Controller
     // 登録メソッド
     {
         $photoInfo = new PhotoInfo();
-        $photoInfo->fill($request->all())->save();
+        // $photoInfo->fill($request->all())->save();
 
         /*
         PHPでの標準的は登録処理はこのようにフォームの値をrequestから各項目から1つずつデータを受け取って処理
+        */
         $photoInfo->photo_id = $request->input('photo_id');
         $photoInfo->shooting_location = $request->input('shooting_location');
+        $photoInfo->prefecture = $request->input('prefecture');
+        $photoInfo->iso = $request->input('iso');
+        $photoInfo->f_value = $request->input('f_value');
+        $photoInfo->shutter_speed = $request->input('shutter_speed');
+        $photoInfo->time_zone = $request->input('time_zone');
+        $photoInfo->is_tripod = $request->input('is_tripod');
+        $photoInfo->other = $request->input('other');
+
 
         $photoInfo->save();
-        */
 
-        return redirect()->route('photoInfo.show');
+        // $photoInfo->PhotoInfo::all();
+        
+
+        return $photoInfo;
     }
 
     /**

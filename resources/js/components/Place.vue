@@ -16,132 +16,131 @@
 			</v-btn>
         </template>
 		</v-data-table>
-		
-<v-card>
-	<v-card-title>
-		<span class="headline">{{ formTitle }}</span>
-	</v-card-title>
-	<v-card-text>
-		<!-- 登録項目の追加箇所 -->
-		<!--  -->
-		<v-container>
-			<v-row>
-				<v-col
-					cols="12"
-					sm="6"
-					md="4"
-					>
-					<v-text-field
-					v-model="editedItem.photo_id"
-					label="写真ID"
-					></v-text-field>
-				</v-col>
-				<v-col
-					cols="12"
-					sm="6"
-					md="4"
-					>
-					<v-text-field
-					v-model="editedItem.shooting_location"
-					label="撮影場所"
-					></v-text-field>
-				</v-col>
-				<!-- ToDo  セレクトボックスに変更予定-->
-				<v-col
-					cols="12"
-					sm="6"
-					md="4"
-					>
-					<v-text-field
-					v-model="editedItem.prefecture"
-					label="都道府県"
-					></v-text-field>
-				</v-col>
-				<v-col
-					cols="12"
-					sm="6"
-					md="4"
-					>
-					<v-text-field
-					v-model="editedItem.iso"
-					label="ISO感度"
-					></v-text-field>
-				</v-col>
-				<v-col
-					cols="12"
-					sm="6"
-					md="4"
-					>
-					<v-text-field
-					v-model="editedItem.f_value"
-					label="F値"
-					></v-text-field>
-				</v-col>
-				<v-col
-					cols="12"
-					sm="6"
-					md="4"
-					>
-					<v-text-field
-					v-model="editedItem.shutter_speed"
-					label="シャッター速度"
-					></v-text-field>
-				</v-col>
-				<!-- 朝・昼・夕・夜のプルダウン -->
-				<v-col
-					cols="12"
-					sm="6"
-					md="4"
-					>
-					<v-text-field
-					v-model="editedItem.time_zone"
-					label="時間帯"
-					></v-text-field>
-				</v-col>
-				<!-- フラグ０・１で管理 -->
-				<v-col
-					cols="12"
-					sm="6"
-					md="4"
-					>
-					<v-text-field
-					v-model="editedItem.tripod_flag"
-					label="三脚有無"
-					></v-text-field>
-				</v-col>
-				<v-col
-					cols="12"
-					sm="6"
-					md="4"
-					>
-					<v-text-field
-					v-model="editedItem.other"
-					label="備考"
-					></v-text-field>
-				</v-col>
-			</v-row>
-		</v-container>
-		</v-card-text>
+		<v-card>
+			<v-card-title>
+				<span class="headline">{{ formTitle }}</span>
+			</v-card-title>
+			<v-card-text>
+				<!-- 登録項目の追加箇所 -->
+				<!--  -->
+				<v-container>
+					<v-row>
+						<v-col
+							cols="12"
+							sm="6"
+							md="4"
+							>
+							<v-text-field
+							v-model="editedItem.photo_id"
+							label="写真ID"
+							></v-text-field>
+						</v-col>
+						<v-col
+							cols="12"
+							sm="6"
+							md="4"
+							>
+							<v-text-field
+							v-model="editedItem.shooting_location"
+							label="撮影場所"
+							></v-text-field>
+						</v-col>
+						<!-- ToDo  セレクトボックスに変更予定-->
+						<v-col
+							cols="12"
+							sm="6"
+							md="4"
+							>
+							<v-text-field
+							v-model="editedItem.prefecture"
+							label="都道府県"
+							></v-text-field>
+						</v-col>
+						<v-col
+							cols="12"
+							sm="6"
+							md="4"
+							>
+							<v-text-field
+							v-model="editedItem.iso"
+							label="ISO感度"
+							></v-text-field>
+						</v-col>
+						<v-col
+							cols="12"
+							sm="6"
+							md="4"
+							>
+							<v-text-field
+							v-model="editedItem.f_value"
+							label="F値"
+							></v-text-field>
+						</v-col>
+						<v-col
+							cols="12"
+							sm="6"
+							md="4"
+							>
+							<v-text-field
+							v-model="editedItem.shutter_speed"
+							label="シャッター速度"
+							></v-text-field>
+						</v-col>
+						<!-- 朝・昼・夕・夜のプルダウン -->
+						<v-col
+							cols="12"
+							sm="6"
+							md="4"
+							>
+							<v-text-field
+							v-model="editedItem.time_zone"
+							label="時間帯"
+							></v-text-field>
+						</v-col>
+						<!-- フラグ０・１で管理 -->
+						<v-col
+							cols="12"
+							sm="6"
+							md="4"
+							>
+							<v-text-field
+							v-model="editedItem.tripod_flag"
+							label="三脚有無"
+							></v-text-field>
+						</v-col>
+						<v-col
+							cols="12"
+							sm="6"
+							md="4"
+							>
+							<v-text-field
+							v-model="editedItem.other"
+							label="備考"
+							></v-text-field>
+						</v-col>
+					</v-row>
+				</v-container>
+				</v-card-text>
 
-<!-- 入力情報を登録する -->
-		<v-card-actions>
-		<v-spacer></v-spacer>
-		<v-btn
-		color="blue darken-1"
-		text
-		@click="close"
-		>
-		Cancel
-		</v-btn>
-		<v-btn
-		color="blue darken-1"
-		text
-		@click="save"
-		>
-		Save
-		</v-btn>
-	</v-card-actions>
-</v-card>
+		<!-- 入力情報を登録する -->
+				<v-card-actions>
+				<v-spacer></v-spacer>
+				<v-btn
+				color="blue darken-1"
+				text
+				@click="close"
+				>
+				Cancel
+				</v-btn>
+				<v-btn
+				color="blue darken-1"
+				text
+				@click="save"
+				>
+				Save
+				</v-btn>
+			</v-card-actions>
+		</v-card>
 	</div>
 	
 </template>
@@ -231,14 +230,13 @@ export default {
 				
 				// this.photoInfo.push(this.editedItem)
 				// 項目をDBに追加
-				axios.post('/api/photoInfo',this.defaultItem,{
-                    photo_id: this.photo_id,
-                    shooting_location: this.shooting_location,
-				})
+				var self = this;
+				axios.post('/api/photoInfo/',self.editedItem)
                 .then(response => {
-					// this.$router.push({photo_id: 'defaultItem.list'});
+					self.photo_id = response.editedItem.photo_id;
+                    self.shooting_location = response.editedItem.shooting_location;
 					
-					console.log(response.photo_id);
+					console.log(response.editedItem.photo_id);
                 })
                 .catch(err => {
                     this.message = err;
