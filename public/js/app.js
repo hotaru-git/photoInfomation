@@ -2265,6 +2265,157 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/PhotoDisplay.vue?vue&type=script&lang=js&":
+/*!***********************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/PhotoDisplay.vue?vue&type=script&lang=js& ***!
+  \***********************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {
+      // defined on the instance
+      avatar: '',
+      // api通信後のメッセージ出力用
+      message: '',
+      // error文言出力用
+      error: '',
+      image_title: '',
+      image_path: '',
+      images: [],
+      // ファイル名表示フラグ
+      is_view: true
+    };
+  },
+  created: function created() {
+    this.getImage();
+  },
+  methods: {
+    getImage: function getImage() {
+      var self = this;
+      var url = '/api/images/';
+      axios__WEBPACK_IMPORTED_MODULE_0___default.a.get(url).then(function (response) {
+        self.images = response.data.image;
+      })["catch"](function (err) {
+        self.message = err;
+      });
+    },
+
+    /**
+     * setError:アップロードが失敗したときの処理メソッド
+     */
+    setError: function setError(error, text) {
+      this.error = error.response && error.response.data && error.response.data.error || text;
+    },
+
+    /** 
+     * Base64:データを文字列()として表す変換方式 
+     * すべてのデータを英数字で表すMIME */
+    getBase64: function getBase64(file) {
+      return new Promise(function (resolve, reject) {
+        var reader = new FileReader();
+        reader.readAsDataURL(file);
+
+        reader.onload = function () {
+          return resolve(reader.result);
+        };
+
+        reader.onerror = function (error) {
+          return reject(error);
+        };
+      });
+    },
+    onImageChange: function onImageChange(e) {
+      var _this = this;
+
+      // 
+      var files = e.target.files || e.dataTransfer.files; // フォームから入力した値を保持
+
+      this.image_path = files[0];
+      this.getBase64(files[0]).then(function (image) {
+        return _this.avatar = image;
+      })["catch"](function (error) {
+        return _this.setError(error, '画像のアップロードに失敗しました。');
+      });
+    },
+    upload: function upload() {
+      var _this2 = this;
+
+      if (this.avatar) {
+        //base64に変換した状態で画像があったときの処理
+
+        /* TODO : postで画像を送る処理をここに書く */
+        var data = new FormData(); // data.append("dbカラム名, フォームから受け渡す値);
+
+        data.append("image_title", this.image_title);
+        data.append("image_path", this.image_path);
+        var url = '/api/images/';
+        axios__WEBPACK_IMPORTED_MODULE_0___default.a.post(url, data).then(function (response) {
+          _this2.message = "登録に成功しました";
+          _this2.is_view = false;
+
+          _this2.$nextTick(function () {
+            this.is_view = true;
+          }); //do not describe
+
+        })["catch"](function (err) {
+          _this2.message = err;
+        });
+        this.message = 'S3にでも保管するか。アップロード完了';
+      } else {
+        //画像がなかったときの処理
+        this.error = '画像がありません';
+      }
+    }
+  }
+});
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Place.vue?vue&type=script&lang=js&":
 /*!****************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/Place.vue?vue&type=script&lang=js& ***!
@@ -2274,6 +2425,8 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
 //
 //
 //
@@ -2420,10 +2573,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      photoInfo: [],
       headers: [{
         text: '写真ID',
         align: 'center',
@@ -2455,7 +2608,7 @@ __webpack_require__.r(__webpack_exports__);
       }, {
         text: '三脚有無',
         align: 'center',
-        value: 'tripod_flag'
+        value: 'is_tripod'
       }, {
         text: '備考',
         align: 'center',
@@ -2466,88 +2619,73 @@ __webpack_require__.r(__webpack_exports__);
         value: 'delete',
         sortable: false
       }],
-      editedIndex: -1,
-      editedItem: {
-        photo_id: 0,
-        shooting_location: 0
+      // 写真情報格納用
+      photoInfo: [],
+      editedItem: {// default値を設定可能
       },
-      defaultItem: {
-        photo_id: 0,
-        shooting_location: 0
-      }
+
+      /* 
+      	TODO - データベースに保管予定項目
+      **/
+      // time_zone項目追加
+      time_zone_item: ['早朝', '朝', '昼', '夕', '夜'],
+      // 都道府県項目追加
+      prefecture: ["北海道", "青森県", "岩手県", "宮城県", "秋田県", "山形県", "福島県", "茨城県", "栃木県", "群馬県", "埼玉県", "千葉県", "東京都", "神奈川県", "新潟県", "富山県", "石川県", "福井県", "山梨県", "長野県", "岐阜県", "静岡県", "愛知県", "三重県", "滋賀県", "京都府", "大阪府", "兵庫県", "奈良県", "和歌山県", "鳥取県", "島根県", "岡山県", "広島県", "山口県", "徳島県", "香川県", "愛媛県", "高知県", "福岡県", "佐賀県", "長崎県", "熊本県", "大分県", "宮崎県", "鹿児島県", "沖縄県"]
     };
   },
-  computed: {
-    formTitle: function formTitle() {
-      return this.editedIndex === -1 ? 'New Item' : 'Edit Item';
-    }
-  },
-  created: function created() {
-    var _this = this;
 
+  /*
+  computed
+  	算出プロパティー
+  */
+  computed: {},
+  created: function created() {
     /* 
       ①api/photoInfoでアクセスした際にjson形式でとれる
       ②responseされた情報をphotoInfoに積める
-      ③
+      ③api.phpでjsonデータを引っ張ってくる.
     */
-    axios.get('/api/photoInfo').then(function (response) {
-      _this.photoInfo = response.data.photoInfo;
+    var self = this;
+    var url = '/api/photoInfo/';
+    axios__WEBPACK_IMPORTED_MODULE_0___default.a.get(url).then(function (response) {
+      self.photoInfo = response.data.photoInfo;
+      console.log(self.photoInfo);
     })["catch"](function (error) {
       console.log(error);
     });
   },
+
+  /*
+  method
+  	ボタン押下時のイベントなどはmethod
+  	呼び出されるたびに毎回処理が走る
+  */
   methods: {
     // イベントのメソッド追加箇所
     deleteItem: function deleteItem(item) {
       var index = this.photoInfo.indexOf(item);
-      confirm('ガチで削除しますか') && this.photoInfo.splice(index, 1);
+      confirm('削除しますか') && this.photoInfo.splice(index, 1);
     },
-    editItem: function editItem(item) {
-      this.editedIndex = this.desserts.indexOf(item);
-      this.editedItem = Object.assign({}, item);
-      this.dialog = true;
-    },
-    // 	getPhotoInfo() {
-    //     axios
-    //         .get('/api/photoInfo')
-    // 		.then(response => {
-    // 			this.photoInfo = response.data.photoInfo;
-    // 		})
-    // 		.catch(error => {
-    // 			console.log(error)
-    // 		});
-    // },
+
+    /*
+    this is the method to register photo infamation when the infomation was input..
+    */
     save: function save() {
-      var _this2 = this;
+      var _this = this;
 
-      if (this.editedIndex > -1) {
-        Object.assign(this.photoInfo[this.editedIndex], this.editedItem);
-      } else {
-        // 
-        this.photoInfo.push(this.editedItem); // 項目をDBに追加
+      this.photoInfo.push(this.editedItem); // 項目をDBに追加
 
-        axios.post("/api/photoInfo/register", {
-          photo_id: this.photo_id,
-          shooting_location: this.shooting_location
-        }).then(function (response) {
-          //this.getPhotoInfo();
-          _this2.photo_id = "";
-          _this2.shooting_location = "";
-        })["catch"](function (err) {
-          _this2.message = err;
-        });
-      }
-
+      var self = this;
+      var url = '/api/photoInfo/';
+      axios__WEBPACK_IMPORTED_MODULE_0___default.a.post(url, self.editedItem).then(function (response) {// do not describe
+      })["catch"](function (err) {
+        _this.message = err;
+      });
       this.close();
+      alert("登録が完了しました");
     },
     close: function close() {
-      var _this3 = this;
-
-      this.dialog = false;
-      this.$nextTick(function () {
-        _this3.editedItem = Object.assign({}, _this3.defaultItem);
-        _this3.editedIndex = -1;
-      });
+      this.editedItem = Object.assign({}, this.editedItem);
     }
   }
 });
@@ -39274,9 +39412,122 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("v-container", [_vm._v("\n        写真一覧画面です\n    ")])
+  return _c("div", { attrs: { id: "app" } }, [
+    _c(
+      "p",
+      {
+        directives: [
+          {
+            name: "show",
+            rawName: "v-show",
+            value: _vm.error,
+            expression: "error"
+          }
+        ],
+        attrs: { id: "error" }
+      },
+      [_vm._v(_vm._s(_vm.error))]
+    ),
+    _vm._v(" "),
+    _c("label", [
+      _c("p", [_vm._v("クリックで画像を変更できます。")]),
+      _vm._v(" "),
+      _c("img", {
+        staticClass: "image",
+        attrs: { src: _vm.avatar, alt: "ここに画像が表示されます" }
+      }),
+      _vm._v(" "),
+      _c("div", [
+        _c("p", [
+          _vm._v("タイトル："),
+          _c("input", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.image_title,
+                expression: "image_title"
+              }
+            ],
+            attrs: { type: "text" },
+            domProps: { value: _vm.image_title },
+            on: {
+              input: function($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.image_title = $event.target.value
+              }
+            }
+          })
+        ]),
+        _vm._v(" "),
+        _vm.is_view
+          ? _c("input", {
+              attrs: {
+                type: "file",
+                id: "avatar_name",
+                accept: "image/jpeg, image/png"
+              },
+              on: { change: _vm.onImageChange }
+            })
+          : _vm._e()
+      ])
+    ]),
+    _vm._v(" "),
+    _c(
+      "button",
+      {
+        on: {
+          click: function($event) {
+            return _vm.upload()
+          }
+        }
+      },
+      [_vm._v("アップロード")]
+    ),
+    _vm._v(" "),
+    _c("p", [_vm._v(_vm._s(_vm.message))]),
+    _vm._v(" "),
+    _c(
+      "table",
+      { attrs: { border: "1" } },
+      [
+        _vm._m(0),
+        _vm._v(" "),
+        _vm._l(_vm.images, function(image) {
+          return _c("tr", { key: image.image_id }, [
+            _c("td", [_vm._v(_vm._s(image.image_title))]),
+            _vm._v(" "),
+            _c("td", [_vm._v(_vm._s(image.image_path.substr(8, 99)))]),
+            _vm._v(" "),
+            _c("td", [
+              _c("img", {
+                staticClass: "img",
+                attrs: { src: "" + image.image_path }
+              })
+            ])
+          ])
+        })
+      ],
+      2
+    )
+  ])
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("tr", [
+      _c("th", [_vm._v("タイトル")]),
+      _vm._v(" "),
+      _c("th", [_vm._v("画像名")]),
+      _vm._v(" "),
+      _c("th", [_vm._v("画像")])
+    ])
+  }
+]
 render._withStripped = true
 
 
@@ -39335,12 +39586,6 @@ var render = function() {
       _c(
         "v-card",
         [
-          _c("v-card-title", [
-            _c("span", { staticClass: "headline" }, [
-              _vm._v(_vm._s(_vm.formTitle))
-            ])
-          ]),
-          _vm._v(" "),
           _c(
             "v-card-text",
             [
@@ -39355,7 +39600,10 @@ var render = function() {
                         { attrs: { cols: "12", sm: "6", md: "4" } },
                         [
                           _c("v-text-field", {
-                            attrs: { label: "写真ID" },
+                            attrs: {
+                              label: "写真ID※自動で割り振られます",
+                              readonly: ""
+                            },
                             model: {
                               value: _vm.editedItem.photo_id,
                               callback: function($$v) {
@@ -39394,8 +39642,8 @@ var render = function() {
                         "v-col",
                         { attrs: { cols: "12", sm: "6", md: "4" } },
                         [
-                          _c("v-text-field", {
-                            attrs: { label: "都道府県" },
+                          _c("v-select", {
+                            attrs: { items: _vm.prefecture, label: "都道府県" },
                             model: {
                               value: _vm.editedItem.prefecture,
                               callback: function($$v) {
@@ -39466,8 +39714,11 @@ var render = function() {
                         "v-col",
                         { attrs: { cols: "12", sm: "6", md: "4" } },
                         [
-                          _c("v-text-field", {
-                            attrs: { label: "時間帯" },
+                          _c("v-select", {
+                            attrs: {
+                              items: _vm.time_zone_item,
+                              label: "時間帯"
+                            },
                             model: {
                               value: _vm.editedItem.time_zone,
                               callback: function($$v) {
@@ -39487,11 +39738,11 @@ var render = function() {
                           _c("v-text-field", {
                             attrs: { label: "三脚有無" },
                             model: {
-                              value: _vm.editedItem.tripod_flag,
+                              value: _vm.editedItem.is_tripod,
                               callback: function($$v) {
-                                _vm.$set(_vm.editedItem, "tripod_flag", $$v)
+                                _vm.$set(_vm.editedItem, "is_tripod", $$v)
                               },
-                              expression: "editedItem.tripod_flag"
+                              expression: "editedItem.is_tripod"
                             }
                           })
                         ],
@@ -39503,7 +39754,7 @@ var render = function() {
                         { attrs: { cols: "12", sm: "6", md: "4" } },
                         [
                           _c("v-text-field", {
-                            attrs: { label: "備考aaaaa" },
+                            attrs: { label: "備考" },
                             model: {
                               value: _vm.editedItem.other,
                               callback: function($$v) {
@@ -39536,7 +39787,7 @@ var render = function() {
                   attrs: { color: "blue darken-1", text: "" },
                   on: { click: _vm.close }
                 },
-                [_vm._v("\n\t\tCancel\n\t\t")]
+                [_vm._v("\n\t\t\t\tCancel\n\t\t\t\t")]
               ),
               _vm._v(" "),
               _c(
@@ -39545,7 +39796,7 @@ var render = function() {
                   attrs: { color: "blue darken-1", text: "" },
                   on: { click: _vm.save }
                 },
-                [_vm._v("\n\t\tSave\n\t\t")]
+                [_vm._v("\n\t\t\t\tSave\n\t\t\t\t")]
               )
             ],
             1
@@ -99743,7 +99994,8 @@ __webpack_require__.r(__webpack_exports__);
  * includes Vue and other libraries. It is a great starting point when
  * building robust, powerful web applications using Vue and Laravel.
  */
-__webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
+__webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js"); // window.axios = require('axios');
+
 
 
 
@@ -99972,21 +100224,24 @@ __webpack_require__.r(__webpack_exports__);
 /*!**************************************************!*\
   !*** ./resources/js/components/PhotoDisplay.vue ***!
   \**************************************************/
-/*! exports provided: default */
+/*! no static exports found */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _PhotoDisplay_vue_vue_type_template_id_842f5bca___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./PhotoDisplay.vue?vue&type=template&id=842f5bca& */ "./resources/js/components/PhotoDisplay.vue?vue&type=template&id=842f5bca&");
-/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+/* harmony import */ var _PhotoDisplay_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./PhotoDisplay.vue?vue&type=script&lang=js& */ "./resources/js/components/PhotoDisplay.vue?vue&type=script&lang=js&");
+/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _PhotoDisplay_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__) if(["default"].indexOf(__WEBPACK_IMPORT_KEY__) < 0) (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _PhotoDisplay_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__[key]; }) }(__WEBPACK_IMPORT_KEY__));
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
-var script = {}
+
+
 
 
 /* normalize component */
 
-var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_1__["default"])(
-  script,
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _PhotoDisplay_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
   _PhotoDisplay_vue_vue_type_template_id_842f5bca___WEBPACK_IMPORTED_MODULE_0__["render"],
   _PhotoDisplay_vue_vue_type_template_id_842f5bca___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
   false,
@@ -100000,6 +100255,20 @@ var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_
 if (false) { var api; }
 component.options.__file = "resources/js/components/PhotoDisplay.vue"
 /* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/PhotoDisplay.vue?vue&type=script&lang=js&":
+/*!***************************************************************************!*\
+  !*** ./resources/js/components/PhotoDisplay.vue?vue&type=script&lang=js& ***!
+  \***************************************************************************/
+/*! no static exports found */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_PhotoDisplay_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib??ref--4-0!../../../node_modules/vue-loader/lib??vue-loader-options!./PhotoDisplay.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/PhotoDisplay.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_PhotoDisplay_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
 
 /***/ }),
 
@@ -100108,7 +100377,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /* harmony default export */ __webpack_exports__["default"] = (new vue_router__WEBPACK_IMPORTED_MODULE_0__["default"]({
-  //mode: 'history',
+  mode: 'history',
   routes: [{
     path: '/admin',
     name: 'admin',

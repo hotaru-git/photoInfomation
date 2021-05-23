@@ -17,9 +17,6 @@
         </template>
 		</v-data-table>
 		<v-card>
-			<v-card-title>
-				<span class="headline">{{ formTitle }}</span>
-			</v-card-title>
 			<v-card-text>
 				<!-- 登録項目の追加箇所 -->
 				<!--  -->
@@ -32,7 +29,8 @@
 							>
 							<v-text-field
 							v-model="editedItem.photo_id"
-							label="写真ID"
+							label="写真ID※自動で割り振られます"
+							readonly
 							></v-text-field>
 						</v-col>
 						<v-col
@@ -51,10 +49,11 @@
 							sm="6"
 							md="4"
 							>
-							<v-text-field
+							<v-select
+							:items="prefecture"
 							v-model="editedItem.prefecture"
 							label="都道府県"
-							></v-text-field>
+							></v-select>
 						</v-col>
 						<v-col
 							cols="12"
@@ -92,10 +91,11 @@
 							sm="6"
 							md="4"
 							>
-							<v-text-field
+							<v-select
+							:items="time_zone_item"
 							v-model="editedItem.time_zone"
 							label="時間帯"
-							></v-text-field>
+							></v-select>
 						</v-col>
 						<!-- フラグ０・１で管理 -->
 						<v-col
@@ -104,7 +104,7 @@
 							md="4"
 							>
 							<v-text-field
-							v-model="editedItem.tripod_flag"
+							v-model="editedItem.is_tripod"
 							label="三脚有無"
 							></v-text-field>
 						</v-col>
@@ -142,7 +142,6 @@
 			</v-card-actions>
 		</v-card>
 	</div>
-	
 </template>
 
 <script>
@@ -168,24 +167,41 @@ export default {
 						sortable:false
 					}
       			],
+				// 写真情報格納用
 				photoInfo:[],
 
-				editedIndex: -1,
 				editedItem: {
 					// default値を設定可能
-					photo_id: 0,
-					shooting_location: 0,
 				},
-				defaultItem: {
-					photo_id: 0,
-					shooting_location: 0,
-				},
+				/* 
+					TODO - データベースに保管予定項目
+				**/
+				// time_zone項目追加
+				time_zone_item: ['早朝', '朝', '昼', '夕','夜'],
+				// 都道府県項目追加
+				
+				prefecture: [
+					"北海道","青森県","岩手県","宮城県",
+					"秋田県","山形県","福島県","茨城県",
+					"栃木県","群馬県","埼玉県","千葉県",
+					"東京都","神奈川県","新潟県","富山県",
+					"石川県","福井県","山梨県","長野県",
+					"岐阜県","静岡県","愛知県","三重県",
+					"滋賀県","京都府","大阪府","兵庫県",
+					"奈良県","和歌山県","鳥取県","島根県",
+					"岡山県","広島県","山口県","徳島県",
+					"香川県","愛媛県","高知県","福岡県",
+					"佐賀県","長崎県","熊本県","大分県",
+					"宮崎県","鹿児島県","沖縄県",
+				],
 			}
 		},
+		/*
+		computed
+			算出プロパティー
+		*/
 		computed: {
-			formTitle () {
-				return this.editedIndex === -1 ? 'New Item' : 'Edit Item'
-			},
+
 		},
 		created(){
 			/* 
@@ -193,7 +209,6 @@ export default {
 			  ②responseされた情報をphotoInfoに積める
 			  ③api.phpでjsonデータを引っ張ってくる.
 			*/
-			//axios.get('/api/photoInfo')
 			var self = this;
 			var url = '/api/photoInfo/';
 			axios.get(url)
@@ -205,46 +220,38 @@ export default {
 					console.log(error)
 				});
 		},
+		/*
+		method
+			ボタン押下時のイベントなどはmethod
+			呼び出されるたびに毎回処理が走る
+		*/
 		methods: {
 			// イベントのメソッド追加箇所
 			deleteItem (item) {
 				const index = this.photoInfo.indexOf(item)
-				confirm('ガチで削除しますか') && this.photoInfo.splice(index, 1)
+				confirm('削除しますか') && this.photoInfo.splice(index, 1)
 			},
-			editItem (item) {
-				this.editedIndex = this.desserts.indexOf(item)
-				this.editedItem = Object.assign({}, item)
-				this.dialog = true
-      		},
-			  
 
 		/*
 		this is the method to register photo infamation when the infomation was input..
 		*/
 			save () {
-				if (this.editedIndex > -1) {
-				Object.assign(this.photoInfo[this.editedIndex], this.editedItem)
-				} else {
-				
 				this.photoInfo.push(this.editedItem)
 				// 項目をDBに追加
-				var self = this;
-				axios.post('/api/photoInfo/',self.editedItem)
+				var self = this
+				var url = '/api/photoInfo/'
+				axios.post(url, self.editedItem)
                 .then(response => {
 					// do not describe
                 })
                 .catch(err => {
-                    this.message = err;
+                    this.message = err
                 });
-				}
 				this.close()
+				alert("登録が完了しました")
 			},
 			close () {
-				this.dialog = false
-				this.$nextTick(() => {
-				this.editedItem = Object.assign({}, this.defaultItem)
-				this.editedIndex = -1
-				})
+				this.editedItem = Object.assign({}, this.editedItem)
 			},
 		}
 }

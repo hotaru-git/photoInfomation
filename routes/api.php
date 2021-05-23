@@ -21,3 +21,15 @@ Route::get('/photoInfo', [App\Http\Controllers\PhotoInfoController::class, 'inde
 --photoInfosにデータ登録
 */
 Route::post('/photoInfo', [App\Http\Controllers\PhotoInfoController::class, 'store']);
+
+
+// Route::post('/photoInfo', [App\Http\Controllers\PhotoInfoController::class, 'destroy']);
+
+// restfulな・・
+// Route::resource('photoInfo', 'PhotoInfoController');
+
+/* ルート情報を一括で作成
+    →「php artisan route:list」でルート情報確認
+**/
+
+Route::apiResource('/images', 'ImageApiController');

@@ -5,6 +5,7 @@
  */
 
 require('./bootstrap');
+// window.axios = require('axios');
 
 import Vue from 'vue';
 import VueRouter from 'vue-router';

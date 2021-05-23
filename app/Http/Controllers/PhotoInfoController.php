@@ -103,8 +103,13 @@ class PhotoInfoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($photo_id)
     {
         //
+        $photoInto = PhotoInfo::find($photo_id);
+        $photoInto->delete();
+
+        return redirect('api/photoInfo');
+        
     }
 }
