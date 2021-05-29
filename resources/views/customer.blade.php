@@ -14,10 +14,10 @@
                 <v-btn width="256" flat to="/place">撮影場所一覧</v-btn>
                 <v-btn width="256" flat to="/photo-display">写真素材一覧</v-btn>
             </v-navigation-drawer>
-        
-            <v-app-bar app clippedLeft flat style="left: 0px" dark>
+        {{--  ヘッダー  --}}
+            {{--  <v-app-bar app clippedLeft flat style="left: 0px" dark>
                 <v-toolbar-title>一覧ページ</v-toolbar-title>
-            </v-app-bar>
+            </v-app-bar>  --}}
         
             <v-main>
               <v-container fluid>

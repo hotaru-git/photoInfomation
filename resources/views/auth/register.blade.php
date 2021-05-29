@@ -6,8 +6,9 @@
         <div class="col-md-8">
             <div class="card">
                 <div class="card-header">{{ __('Register') }}</div>
-
+{{--  Name/E-Mail/Password/ConfirmPassword登録処理  --}}
                 <div class="card-body">
+                    {{--  App\Http\Controllers\Auth\RegisterController@register  --}}
                     <form method="POST" action="{{ route('register') }}">
                         @csrf
 

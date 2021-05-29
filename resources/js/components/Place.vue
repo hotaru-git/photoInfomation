@@ -141,7 +141,11 @@
 				</v-btn>
 			</v-card-actions>
 		</v-card>
+		<button v-on:click="downloadCSV">
+		CSVダウンロード
+		</button>
 	</div>
+	
 </template>
 
 <script>
@@ -214,7 +218,7 @@ export default {
 			axios.get(url)
 				.then(response => {
 					self.photoInfo = response.data.photoInfo;
-					console.log(self.photoInfo);
+					
 				})
 				.catch(error => {
 					console.log(error)
@@ -226,10 +230,18 @@ export default {
 			呼び出されるたびに毎回処理が走る
 		*/
 		methods: {
-			// イベントのメソッド追加箇所
+			// add methods
 			deleteItem (item) {
-				const index = this.photoInfo.indexOf(item)
+				const index = this.photoInfo.indexOf(item.photo_id)
 				confirm('削除しますか') && this.photoInfo.splice(index, 1)
+				var url = '/api/photoInfo/'
+				axios.delete(url + item.photo_id)
+				.then(response => {
+					alert("「" + item.photo_id + "」削除成功");
+				})
+				.catch(error => {
+					console.log(error)
+				});
 			},
 
 		/*
@@ -237,22 +249,43 @@ export default {
 		*/
 			save () {
 				this.photoInfo.push(this.editedItem)
-				// 項目をDBに追加
+				// add content in db
 				var self = this
 				var url = '/api/photoInfo/'
 				axios.post(url, self.editedItem)
                 .then(response => {
 					// do not describe
+					this.resetForm();
                 })
                 .catch(err => {
                     this.message = err
                 });
 				this.close()
-				alert("登録が完了しました")
 			},
 			close () {
 				this.editedItem = Object.assign({}, this.editedItem)
 			},
+			/**
+			 * resetForm フォームリセット
+			 */
+			resetForm () {
+				this.editedItem = {};
+			},
+			/**
+			 * downloadCSV CSVエクスポート
+			 */
+			downloadCSV () {
+				var csv = '\ufeff' + '写真ID,撮影場所,都道府県,ISO,F値,シャッター時間,時間帯,三脚有無,備考\n'
+				this.photoInfo.forEach(el => {
+					var line = el['photo_id'] + ',' + el['shooting_location'] + ',' + el['prefecture'] +',' + el['iso'] +',' + el['f_value'] +',' + el['shutter_speed'] +',' + el['time_zone'] +',' + el['is_tripod'] +',' + el['other'] +'\n'
+					csv += line
+				})
+				let blob = new Blob([csv], { type: 'text/csv' })
+				let link = document.createElement('a')
+				link.href = window.URL.createObjectURL(blob)
+				link.download = 'Result.csv'
+				link.click()
+			}
 		}
 }
 </script>

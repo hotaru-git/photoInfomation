@@ -15,12 +15,11 @@ use App\PhotoInfo;
 /*
 --photoInfosの一覧表示
 */
-Route::get('/photoInfo', [App\Http\Controllers\PhotoInfoController::class, 'index']);
-
-/*
---photoInfosにデータ登録
-*/
-Route::post('/photoInfo', [App\Http\Controllers\PhotoInfoController::class, 'store']);
+// Route::get('/photoInfo', [App\Http\Controllers\PhotoInfoController::class, 'index']);
+// /*
+// --photoInfosにデータ登録
+// */
+// Route::post('/photoInfo', [App\Http\Controllers\PhotoInfoController::class, 'store']);
 
 
 // Route::post('/photoInfo', [App\Http\Controllers\PhotoInfoController::class, 'destroy']);
@@ -31,5 +30,6 @@ Route::post('/photoInfo', [App\Http\Controllers\PhotoInfoController::class, 'sto
 /* ルート情報を一括で作成
     →「php artisan route:list」でルート情報確認
 **/
+Route::apiResource('/photoInfo', 'PhotoInfoController');
 
 Route::apiResource('/images', 'ImageApiController');

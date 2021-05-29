@@ -27,9 +27,3 @@ const app = new Vue({
     router,
     vuetify: new Vuetify()
 });
-
-const Router = [
-    { path: '/admin', component: Admin },
-    { path: '/place', component: Place },
-    { path: '/photo-display', component: PhotoDisplay }
-  ]

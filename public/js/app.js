@@ -2573,6 +2573,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -2649,7 +2653,6 @@ __webpack_require__.r(__webpack_exports__);
     var url = '/api/photoInfo/';
     axios__WEBPACK_IMPORTED_MODULE_0___default.a.get(url).then(function (response) {
       self.photoInfo = response.data.photoInfo;
-      console.log(self.photoInfo);
     })["catch"](function (error) {
       console.log(error);
     });
@@ -2661,10 +2664,16 @@ __webpack_require__.r(__webpack_exports__);
   	呼び出されるたびに毎回処理が走る
   */
   methods: {
-    // イベントのメソッド追加箇所
+    // add methods
     deleteItem: function deleteItem(item) {
-      var index = this.photoInfo.indexOf(item);
+      var index = this.photoInfo.indexOf(item.photo_id);
       confirm('削除しますか') && this.photoInfo.splice(index, 1);
+      var url = '/api/photoInfo/';
+      axios__WEBPACK_IMPORTED_MODULE_0___default.a["delete"](url + item.photo_id).then(function (response) {
+        alert("「" + item.photo_id + "」削除成功");
+      })["catch"](function (error) {
+        console.log(error);
+      });
     },
 
     /*
@@ -2673,19 +2682,45 @@ __webpack_require__.r(__webpack_exports__);
     save: function save() {
       var _this = this;
 
-      this.photoInfo.push(this.editedItem); // 項目をDBに追加
+      this.photoInfo.push(this.editedItem); // add content in db
 
       var self = this;
       var url = '/api/photoInfo/';
-      axios__WEBPACK_IMPORTED_MODULE_0___default.a.post(url, self.editedItem).then(function (response) {// do not describe
+      axios__WEBPACK_IMPORTED_MODULE_0___default.a.post(url, self.editedItem).then(function (response) {
+        // do not describe
+        _this.resetForm();
       })["catch"](function (err) {
         _this.message = err;
       });
       this.close();
-      alert("登録が完了しました");
     },
     close: function close() {
       this.editedItem = Object.assign({}, this.editedItem);
+    },
+
+    /**
+     * resetForm フォームリセット
+     */
+    resetForm: function resetForm() {
+      this.editedItem = {};
+    },
+
+    /**
+     * downloadCSV CSVエクスポート
+     */
+    downloadCSV: function downloadCSV() {
+      var csv = "\uFEFF" + '写真ID,撮影場所,都道府県,ISO,F値,シャッター時間,時間帯,三脚有無,備考\n';
+      this.photoInfo.forEach(function (el) {
+        var line = el['photo_id'] + ',' + el['shooting_location'] + ',' + el['prefecture'] + ',' + el['iso'] + ',' + el['f_value'] + ',' + el['shutter_speed'] + ',' + el['time_zone'] + ',' + el['is_tripod'] + ',' + el['other'] + '\n';
+        csv += line;
+      });
+      var blob = new Blob([csv], {
+        type: 'text/csv'
+      });
+      var link = document.createElement('a');
+      link.href = window.URL.createObjectURL(blob);
+      link.download = 'Result.csv';
+      link.click();
     }
   }
 });
@@ -39803,7 +39838,11 @@ var render = function() {
           )
         ],
         1
-      )
+      ),
+      _vm._v(" "),
+      _c("button", { on: { click: _vm.downloadCSV } }, [
+        _vm._v("\n\t\tCSVダウンロード\n\t\t")
+      ])
     ],
     1
   )
@@ -100011,16 +100050,6 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
   router: _router__WEBPACK_IMPORTED_MODULE_2__["default"],
   vuetify: new vuetify__WEBPACK_IMPORTED_MODULE_3___default.a()
 });
-var Router = [{
-  path: '/admin',
-  component: Admin
-}, {
-  path: '/place',
-  component: Place
-}, {
-  path: '/photo-display',
-  component: PhotoDisplay
-}];
 
 /***/ }),
 
