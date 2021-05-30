@@ -1,28 +1,22 @@
+<!-- Fonts に追加 -->
+<link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css" rel="stylesheet">
 
+<!-- Styles に追加 -->
+<link href="{{ asset('css/user.css') }}" rel="stylesheet">
 
-@section('content')
+<body>
         <div id="app">
-            @extends('layouts.app')
             <v-app>
-                <v-navigation-drawer app clipped v-model="drawer">
-                    <v-btn width="256" flat to="/admin">管理者</v-btn>
-                    <v-btn width="256" flat to="/place">撮影場所一覧</v-btn>
-                    <v-btn width="256" flat to="/photo-display">写真素材一覧</v-btn>
-                </v-navigation-drawer>
-            
-                <v-app-bar app clippedLeft flat style="left: 0px" dark>
-                    <v-toolbar-title>一覧ページ</v-toolbar-title>
-                </v-app-bar>
-            
+                <header-component></header-component>
                 <v-main>
                   <v-container fluid>
                     <router-view></router-view>
                   </v-container>
                 </v-main>
-            
                 <v-footer app color="primary">
                 </v-footer>
             </v-app>
         </div>
     <script src="{{ mix('js/app.js') }}"></script>
-@endsection
+</body>

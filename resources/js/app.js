@@ -5,7 +5,6 @@
  */
 
 require('./bootstrap');
-// window.axios = require('axios');
 
 import Vue from 'vue';
 import VueRouter from 'vue-router';
@@ -20,7 +19,8 @@ Vue.use(VueRouter);
 Vue.use(Vuetify)
 
 
-Vue.component('example-component', require('./components/ExampleComponent.vue').default);
+Vue.component('header-component', require('./components/HeaderComponent.vue').default);
+
 
 const app = new Vue({
     el: '#app',

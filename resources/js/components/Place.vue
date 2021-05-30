@@ -1,5 +1,4 @@
 <template slot="items" slot-scope="props">
-
 	<div id="app">
 		<v-data-table
          :headers="headers"
