@@ -2287,7 +2287,7 @@ __webpack_require__.r(__webpack_exports__);
        * 20210531- vuetify公式リファレンス参照
        */
       items: [{
-        title: '管理者',
+        title: '管理者aa',
         icon: 'mdi-home',
         to: "/admin"
       }, {

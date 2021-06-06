@@ -44,7 +44,7 @@ export default {
              * 20210531- vuetify公式リファレンス参照
              */
             items: [
-                {title: '管理者', icon: 'mdi-home', to: "/admin"},
+                {title: '管理者aa', icon: 'mdi-home', to: "/admin"},
                 {title: '撮影場所一覧', icon: 'mdi-view-dashboard', to: "/place"},
                 {title: '写真登録', icon: 'mdi-image', to: "/photo-display"}
             ]
