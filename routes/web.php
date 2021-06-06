@@ -13,7 +13,7 @@
 
 Route::get('/', 'HomeController@index')->name('home');
 
-// Route::get('/', function () {aaa
+// Route::get('/', function () {
 //     return view('customer');
 // });
 // 2021/05/16 リロード時、404エラー対応処理 start
