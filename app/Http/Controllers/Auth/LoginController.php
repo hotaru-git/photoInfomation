@@ -36,4 +36,14 @@ class LoginController extends Controller
     {
         $this->middleware('guest')->except('logout');
     }
+
+    /**
+     * ログアウト実装
+     * TODO : 遷移はできるが、ログアウト後にlogout?が残る→まあいいか
+     */
+    public function logout()
+    {
+        session()->flush();
+        return view('/layouts/app');
+    }
 }

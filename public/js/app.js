@@ -2274,6 +2274,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -2287,7 +2292,7 @@ __webpack_require__.r(__webpack_exports__);
        * 20210531- vuetify公式リファレンス参照
        */
       items: [{
-        title: '管理者aa',
+        title: '管理者',
         icon: 'mdi-home',
         to: "/admin"
       }, {
@@ -39461,7 +39466,11 @@ var render = function() {
             }
           }),
           _vm._v(" "),
-          _c("v-toolbar-title", [_vm._v("一覧ページ")])
+          _c("v-toolbar-title", [_vm._v("一覧ページ")]),
+          _vm._v(" "),
+          _c("form", { attrs: { action: "/logout", method: "get" } }, [
+            _c("input", { attrs: { type: "submit", value: "ログアウト" } })
+          ])
         ],
         1
       ),

@@ -24,9 +24,4 @@ class PhotoInfo extends Model
         'is_tripod',
         'other',
     ];
-    
-
-    // ★Laravelでは「id」timestampsのカラム「create_at」「update_id」が標準で作成する仕組みがあるのでfalseにする
-    // public $timestamps = false;
-    
 }
