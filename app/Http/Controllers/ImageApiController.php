@@ -34,8 +34,7 @@ class ImageApiController extends Controller
         // $image->fill($request->all())->save();
         if (request()->image_path) {
             $file_name = time() . '.' . request()->image_path->getClientOriginalName();
-            request()->image_path->storeAs('public/storage', $file_name);
-
+            request()->image_path->storeAs('public/', $file_name);
             $image = new Image();
             $image->image_path = 'storage/' . $file_name;
             $image->image_title = $request->image_title;

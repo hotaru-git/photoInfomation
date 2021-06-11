@@ -30,7 +30,7 @@
                 <td>{{ image.image_title }}</td>
                 <!-- storage/切り捨て ※他のやり方もあると思われ -->
                 <td>{{ image.image_path.substr(8, 99) }}</td>
-                <td><img class="img" :src="`${image.image_path}`" /></td>
+                <td><img class="img" alt="" :src="`../${image.image_path}`"/></td>
             </tr>
     </table>
     </div>
@@ -103,7 +103,6 @@ export default {
         upload () {
             if (this.avatar) {
             //base64に変換した状態で画像があったときの処理
-                
             /* TODO : postで画像を送る処理をここに書く */
             let data = new FormData()
             // data.append("dbカラム名, フォームから受け渡す値);
@@ -115,7 +114,6 @@ export default {
             axios.post(url, data)
             .then(response => {
                 this.message ="登録に成功しました"
-                
                 this.is_view = false
                 this.$nextTick(function () {
                     this.is_view = true;

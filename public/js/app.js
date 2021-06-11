@@ -39634,7 +39634,7 @@ var render = function() {
             _c("td", [
               _c("img", {
                 staticClass: "img",
-                attrs: { src: "" + image.image_path }
+                attrs: { alt: "", src: "../" + image.image_path }
               })
             ])
           ])

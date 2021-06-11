@@ -16,6 +16,14 @@ class CreatePhotoInfosTable extends Migration
         Schema::create('photoInfos', function (Blueprint $table) {
             $table->bigIncrements('photo_id');
             $table->string('shooting_location');
+            $table->string('prefecture');
+            $table->string('iso');
+            $table->string('f_value');
+            $table->string('shutter_speed');
+            $table->string('time_zone');
+            $table->boolean('is_tripod');
+            $table->string('other');
+            $table->timestamps();
         });
     }
 
