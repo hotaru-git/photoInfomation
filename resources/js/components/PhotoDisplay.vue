@@ -12,7 +12,7 @@
         <input
             type="file"
             id="avatar_name"
-            accept="image/jpeg, image/png"
+            accept="image/jpeg,image/jpg, image/png"
             @change="onImageChange"
             v-if = "is_view"
             />
@@ -30,7 +30,7 @@
                 <td>{{ image.image_title }}</td>
                 <!-- storage/切り捨て ※他のやり方もあると思われ -->
                 <td>{{ image.image_path.substr(8, 99) }}</td>
-                <td><img class="img" alt="" :src="`../${image.image_path}`"/></td>
+                <td><img class="img" alt="" :src="`../${image.image_path}`" width="300" height="200"/></td>
             </tr>
     </table>
     </div>

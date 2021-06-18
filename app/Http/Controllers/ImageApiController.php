@@ -16,8 +16,6 @@ class ImageApiController extends Controller
     {
         //
         $image = Image::all();
-        
-
         return response()->json(['image' => $image]);
     }
 
@@ -39,7 +37,6 @@ class ImageApiController extends Controller
             $image->image_path = 'storage/' . $file_name;
             $image->image_title = $request->image_title;
             $image->save();
-
             return ['success' => '登録しました!'];
         }
     }

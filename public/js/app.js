@@ -39597,7 +39597,7 @@ var render = function() {
               attrs: {
                 type: "file",
                 id: "avatar_name",
-                accept: "image/jpeg, image/png"
+                accept: "image/jpeg,image/jpg, image/png"
               },
               on: { change: _vm.onImageChange }
             })
@@ -39634,7 +39634,12 @@ var render = function() {
             _c("td", [
               _c("img", {
                 staticClass: "img",
-                attrs: { alt: "", src: "../" + image.image_path }
+                attrs: {
+                  alt: "",
+                  src: "../" + image.image_path,
+                  width: "300",
+                  height: "200"
+                }
               })
             ])
           ])
