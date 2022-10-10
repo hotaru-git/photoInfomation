@@ -2,6 +2,7 @@ import Router from 'vue-router'
 import Admin from './components/Admin.vue'
 import Place from './components/Place.vue'
 import PhotoDisplay from './components/PhotoDisplay.vue'
+import Mountain from './components/Mountain.vue'
 
 export default new Router({
   mode: 'history',
@@ -21,6 +22,11 @@ export default new Router({
       path: '/photo-display',
       name: 'photo-display',
       component: PhotoDisplay
+    },
+    {
+      path: '/mountain',
+      name: 'mountain', 
+      component: Mountain
     },
   ]
 });

@@ -1,9 +1,9 @@
 <template slot="items" slot-scope="props">
 	<div id="app">
 		<v-data-table
-         :headers="headers"
-         :items="photoInfo"
-    	>
+        :headers="headers"
+        :items="photoInfo"
+		>
 		<!-- 削除機能追加 -->
 		<template v-slot:[`item.delete`]="{ item }">
 			<v-btn
@@ -51,7 +51,7 @@
 							<v-select
 							:items="prefecture"
 							v-model="editedItem.prefecture"
-							label="都道府県"
+							label="都道府県!!"
 							></v-select>
 						</v-col>
 						<v-col
@@ -169,7 +169,7 @@ export default {
 						value:'delete',
 						sortable:false
 					}
-      			],
+				],
 				// 写真情報格納用
 				photoInfo:[],
 
@@ -208,9 +208,9 @@ export default {
 		},
 		created(){
 			/* 
-			  ①api/photoInfoでアクセスした際にjson形式でとれる
-			  ②responseされた情報をphotoInfoに積める
-			  ③api.phpでjsonデータを引っ張ってくる.
+			①api/photoInfoでアクセスした際にjson形式でとれる
+			②responseされた情報をphotoInfoに積める
+			③api.phpでjsonデータを引っ張ってくる.
 			*/
 			var self = this;
 			var url = '/api/photoInfo/';
