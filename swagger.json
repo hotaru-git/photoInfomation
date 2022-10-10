@@ -1,0 +1,302 @@
+{
+  "openapi": "3.0.2",
+  "info": {
+    "title": "mountix API",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://mountix.codemountains.org/api/v1"
+    }
+  ],
+  "paths": {
+    "/mountains": {
+      "get": {
+        "tags": [
+          "mountains"
+        ],
+        "summary": "Search mountains",
+        "description": "[日本の主な山岳一覧](https://www.gsi.go.jp/kihonjohochousa/kihonjohochousa41140.html)に掲載されている山岳一覧を取得します\n",
+        "parameters": [
+          {
+            "name": "prefecture",
+            "in": "query",
+            "description": "都道府県ID - 都道府県による検索が可能・[都道府県ID一覧はこちら](./prefectures/)\n",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "name",
+            "in": "query",
+            "description": "山岳名 or 山岳名（かな） - 部分一致検索が可能",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "tag",
+            "in": "query",
+            "description": "タグID - 百名山(tag=1)、二百名山(tag=2)が指定でき、それに該当する山の検索が可能",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "description": "オフセット - 指定した数だけ抽出するレコードをスキップすることが可能",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "リミット - 指定した数のレコード抽出が可能",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "description": "ソート - ID(id)、標高(elevation)、山岳名(name)の昇順・降順で山岳一覧の並べ替えが可能",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "key.type (id/elevation/name).(asc/desc)",
+              "example": "elevation.desc"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "日本の主な山岳一覧取得結果",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MountainList"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/mountains/{mountainId}": {
+      "get": {
+        "tags": [
+          "mountains"
+        ],
+        "summary": "Get mountain by ID",
+        "description": "[日本の主な山岳一覧](https://www.gsi.go.jp/kihonjohochousa/kihonjohochousa41140.html)に掲載されている山岳情報を取得します\n",
+        "parameters": [
+          {
+            "name": "mountainId",
+            "in": "path",
+            "description": "山岳ID",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "日本の主な山岳の取得結果",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Mountain"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Mountain": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "description": "山岳ID",
+            "type": "integer",
+            "format": "int32",
+            "example": 465
+          },
+          "name": {
+            "description": "山岳名",
+            "type": "string",
+            "example": "白馬岳"
+          },
+          "nameKana": {
+            "description": "山岳名(かな)",
+            "type": "string",
+            "example": "しろうまだけ"
+          },
+          "area": {
+            "description": "所在・エリア",
+            "type": "string",
+            "example": "飛騨山脈北部"
+          },
+          "prefectures": {
+            "description": "都道府県の一覧",
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "example": [
+              "富山県",
+              "長野県"
+            ]
+          },
+          "elevation": {
+            "description": "標高（m）",
+            "type": "integer",
+            "format": "int32",
+            "example": 2932
+          },
+          "location": {
+            "description": "位置情報",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Location"
+              }
+            ],
+            "example": {
+              "latitude": 36.75861111111111,
+              "longitude": 137.75861111111112,
+              "gsiUrl": "https://maps.gsi.go.jp/#15/36.75861111111111/137.75861111111112"
+            }
+          },
+          "tags": {
+            "description": "タグ一覧",
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "example": [
+              "百名山"
+            ]
+          }
+        }
+      },
+      "MountainList": {
+        "type": "object",
+        "properties": {
+          "mountains": {
+            "type": "array",
+            "items": {
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/Mountain"
+                }
+              ]
+            },
+            "example": [
+              {
+                "id": 465,
+                "name": "白馬岳",
+                "nameKana": "しろうまだけ",
+                "area": "飛騨山脈北部",
+                "prefectures": [
+                  "富山県",
+                  "長野県"
+                ],
+                "elevation": 2932,
+                "location": {
+                  "latitude": 36.75861111111111,
+                  "longitude": 137.75861111111112,
+                  "gsiUrl": "https://maps.gsi.go.jp/#15/36.75861111111111/137.75861111111112"
+                },
+                "tags": [
+                  "百名山"
+                ]
+              },
+              {
+                "id": 767,
+                "name": "白馬山",
+                "nameKana": "しらまやま",
+                "area": "紀伊山地西部",
+                "prefectures": [
+                  "和歌山県"
+                ],
+                "elevation": 957,
+                "location": {
+                  "latitude": 34.01583333333333,
+                  "longitude": 135.37222222222223,
+                  "gsiUrl": "https://maps.gsi.go.jp/#15/34.01583333333333/135.37222222222223"
+                },
+                "tags": []
+              }
+            ],
+            "description": "山岳一覧"
+          },
+          "total": {
+            "type": "integer",
+            "format": "int32",
+            "example": 2,
+            "description": "山岳一覧の総レコード数"
+          },
+          "offset": {
+            "type": "integer",
+            "format": "int32",
+            "example": 0,
+            "description": "オフセット"
+          },
+          "limit": {
+            "type": "integer",
+            "format": "int32",
+            "example": 10,
+            "nullable": true,
+            "description": "リミット - 未指定の場合、null"
+          }
+        }
+      },
+      "Location": {
+        "type": "object",
+        "properties": {
+          "latitude": {
+            "type": "number",
+            "format": "float64",
+            "description": "緯度（°）"
+          },
+          "longitude": {
+            "type": "number",
+            "format": "float64",
+            "description": "経度（°）"
+          },
+          "gsiUrl": {
+            "type": "string",
+            "format": "URL",
+            "description": "地理院地図 / GSI Maps URL"
+          }
+        }
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "mountains",
+      "description": "日本の主な山岳一覧"
+    }
+  ],
+  "externalDocs": {
+    "description": "mountix API について",
+    "url": "https://dottrail.codemountains.org/lp/mountix-api/"
+  }
+}

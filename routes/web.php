@@ -11,11 +11,6 @@
 |
 */
 
-Route::get('/', 'HomeController@index')->name('home');
-
-// Route::get('/', function () {
-//     return view('customer');
-// });
 // 2021/05/16 リロード時、404エラー対応処理 start
 Route::get('/place', function () {
     return view('home');
@@ -26,6 +21,9 @@ Route::get('/admin', function () {
 });
 
 Route::get('/photo-display', function () {
+    return view('home');
+});
+Route::get('/mountain', function () {
     return view('home');
 });
 // 2021/05/16 リロード時、404エラー対応処理 end
